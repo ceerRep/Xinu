@@ -37,6 +37,7 @@ void	clkhandler(void)
 	/*   remaining time reaches zero			     */
 
 	if((--preempt) <= 0) {
+        kputc('\n');
 		preempt = QUANTUM;
 		resched();
 	}

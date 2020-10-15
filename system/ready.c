@@ -23,7 +23,9 @@ status	ready(
 	prptr = &proctab[pid];
 	prptr->prstate = PR_READY;
 	insert(pid, readylist, prptr->prprio);
-	resched();
+
+    if (prptr->prprio > proctab[currpid].prprio)
+	    resched();
 
 	return OK;
 }

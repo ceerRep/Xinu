@@ -38,6 +38,9 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	/* Force context switch to highest priority ready process */
 
 	currpid = dequeue(readylist);
+
+    kprintf("Context switched to (%d) [%s]\n", currpid, proctab[currpid].prname);
+
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/

@@ -2,22 +2,25 @@
 
 #include <xinu.h>
 
-process	main(void)
+void puta(void);
+void putb(void);
+
+process main(void)
 {
-
-	/* Run the Xinu shell */
-
-	recvclr();
-	resume(create(shell, 8192, 50, "shell", 1, CONSOLE));
-
-	/* Wait for shell to exit and recreate it */
-
-	while (TRUE) {
-		receive();
-		sleepms(200);
-		kprintf("\n\nMain process recreating shell\n\n");
-		resume(create(shell, 4096, 20, "shell", 1, CONSOLE));
-	}
+	resume(create(puta, 8192, 20, "🦄", 0));
+	resume(create(putb, 8192, 20, "🐴", 0));
 	return OK;
-    
 }
+
+void puta(void)
+{
+	while (1)
+		kprintf("🦄");
+}
+
+void putb(void)
+{
+	while (1)
+		kprintf("🐴");
+}
+

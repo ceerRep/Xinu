@@ -1,3 +1,5 @@
+#ifndef _stdio_H
+#define _stdio_H
 /* stdio.h - definintions and constants for standard I/O functions */
 
 
@@ -32,3 +34,6 @@ extern	int32	fputc(int32, int32);
 extern	int32	fputs(char *, int32);
 extern	int32	putchar(int32 c);
 extern	int32	getchar(void);
+
+#endif
+

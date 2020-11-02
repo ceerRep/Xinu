@@ -1,3 +1,5 @@
+#ifndef _ramdisk_H
+#define _ramdisk_H
 /* ramdisk.h - definitions for a ram disk (for testing) */
 
 /* Ram disk block size */
@@ -10,3 +12,6 @@ struct	ramdisk	{
 	};
 
 extern	struct	ramdisk	Ram;
+
+#endif
+

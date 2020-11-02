@@ -1,3 +1,5 @@
+#ifndef _shell_H
+#define _shell_H
 /* shell.h - Declarations and constants used by the Xinu shell */
 
 /* Size constants */
@@ -73,3 +75,6 @@ struct	cmdent	{			/* Entry in command table	*/
 
 extern	uint32	ncmd;
 extern	const	struct	cmdent	cmdtab[];
+
+#endif
+

@@ -1,3 +1,5 @@
+#ifndef _semaphore_H
+#define _semaphore_H
 /* semaphore.h - isbadsem */
 
 #ifndef	NSEM
@@ -20,3 +22,6 @@ struct	sentry	{
 extern	struct	sentry semtab[];
 
 #define	isbadsem(s)	((int32)(s) < 0 || (s) >= NSEM)
+
+#endif
+

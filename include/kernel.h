@@ -1,11 +1,14 @@
+#ifndef _kernel_H
+#define _kernel_H
 /* kernel.h */
 
 /* General type declarations used throughout the kernel */
 
+typedef signed   char   int8;
 typedef	unsigned char	byte;
 typedef	unsigned char	uint8;
-typedef	int		int32;
-typedef	short		int16;
+typedef	int		 int32;
+typedef	short	 int16;
 typedef	unsigned int	uint32;
 typedef	unsigned short	uint16;
 typedef	unsigned long long uint64;
@@ -13,13 +16,15 @@ typedef	unsigned long long uint64;
 /* Xinu-specific types */
 
 typedef	int32	sid32;		/* semaphore ID				*/
-typedef	int16	qid16;		/* queue ID				*/
+typedef	int16	qid16;		/* queue ID					*/
 typedef	int32	pid32;		/* process ID				*/
 typedef	int32	did32;		/* device ID				*/
 typedef	int16	pri16;		/* process priority			*/
 typedef	uint32	umsg32;		/* message passed among processes	*/
 typedef	int32	bpid32;		/* buffer pool ID			*/
 typedef	byte	bool8;		/* Boolean type				*/
+typedef int8   pri8;		/* process priority			*/
+typedef int8   tim8;		/* process time				*/
 typedef	uint32	intmask;	/* saved interrupt mask			*/
 typedef	int32	ibid32;		/* index block ID (used in file system)	*/
 typedef	int32	dbid32;		/* data block ID (used in file system)	*/
@@ -71,3 +76,6 @@ extern	qid16	readylist;	/* global ID for list of ready processes*/
 syscall	kprintf(char *fmt, ...);
 syscall	kputc(byte);
 syscall	kgetc(void);
+
+#endif
+

@@ -1,3 +1,5 @@
+#ifndef _pxe_H
+#define _pxe_H
 /* pxe.h - Definitions for Pre-Execution Boot Environment */
 
 /* BIOS SYSID Structure Table */
@@ -41,3 +43,6 @@ char* get_uuid(uint16* uuid_len);
 
 int32 build_dhcp_discover_pxe(struct dhcpmsg* dmsg);
 int32 build_dhcp_request_pxe(struct dhcpmsg* dmsg, const struct dhcpmsg* dmsg_offer);
+
+#endif
+

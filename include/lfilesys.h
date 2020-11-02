@@ -1,3 +1,5 @@
+#ifndef _lfilesys_H
+#define _lfilesys_H
 /* lfilesys.h - ib2sect, ib2disp */
 
 /************************************************************************/
@@ -174,3 +176,6 @@ extern	struct	lflcblk	lfltab[];
 #define	LF_CTL_DEL	F_CTL_DEL	/* Delete a file		*/
 #define	LF_CTL_TRUNC	F_CTL_TRUNC	/* Truncate a file		*/
 #define LF_CTL_SIZE	F_CTL_SIZE	/* Obtain the size of a file	*/
+
+#endif
+

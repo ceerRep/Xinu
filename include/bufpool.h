@@ -1,3 +1,5 @@
+#ifndef _bufpool_H
+#define _bufpool_H
 /* bufpool.h */
 
 #ifndef	NBPOOLS
@@ -22,3 +24,6 @@ struct	bpentry	{		/* Description of a single buffer pool	*/
 
 extern	struct	bpentry buftab[];/* Buffer pool table			*/
 extern	bpid32	nbpools;	/* current number of allocated pools	*/
+
+#endif
+

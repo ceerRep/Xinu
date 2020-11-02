@@ -1,3 +1,5 @@
+#ifndef _name_H
+#define _name_H
 /* name.h */
 
 /* Constants that define the namespace mapping table sizes */
@@ -17,3 +19,6 @@ struct	nmentry	{			/* Definition of prefix table	*/
 
 extern	struct	nmentry	nametab[];	/* Table of name mappings	*/
 extern	int32	nnames;			/* Number of entries allocated	*/
+
+#endif
+

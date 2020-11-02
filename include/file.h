@@ -1,3 +1,5 @@
+#ifndef _file_H
+#define _file_H
 /* file.h - definitions commmon to remote and local file systems */
 
 /* Definition of file mode bits */
@@ -18,3 +20,6 @@
 #define	F_CTL_MKDIR	3		/* make a directory		*/
 #define	F_CTL_RMDIR	4		/* remove a directory		*/
 #define F_CTL_SIZE	5		/* Obtain the size of a file	*/
+
+#endif
+

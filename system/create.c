@@ -2,6 +2,8 @@
 
 #include <xinu.h>
 
+#include "sche.h"
+
 local	int newpid();
 
 /*------------------------------------------------------------------------
@@ -41,6 +43,7 @@ pid32	create(
 	/* Initialize process table entry for new process */
 	prptr->prstate = PR_SUSP;	/* Initial state is suspended	*/
 	prptr->prprio = priority;
+	prptr->prtime = timeslice_from_priority(priority);
 	prptr->prstkbase = (char *)saddr;
 	prptr->prstklen = ssize;
 	prptr->prname[PNMLEN-1] = NULLCH;
@@ -116,6 +119,7 @@ local	pid32	newpid(void)
 		} else {
 			nextpid++;
 		}
-	}kprintf("newpid error\n");
+	}
+	kprintf("newpid error\n");
 	return (pid32) SYSERR;
 }

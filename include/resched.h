@@ -1,3 +1,5 @@
+#ifndef _resched_H
+#define _resched_H
 /* resched.h */
 
 /* Constants and variables related to deferred rescheduling */
@@ -14,3 +16,6 @@ struct	defer	{
 };
 
 extern	struct	defer	Defer;
+
+#endif
+

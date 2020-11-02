@@ -1,3 +1,5 @@
+#ifndef _process_H
+#define _process_H
 /* process.h - isbadpid */
 
 /* Maximum number of processes in the system */
@@ -42,7 +44,9 @@
 
 struct procent {		/* Entry in the process table		*/
 	uint16	prstate;	/* Process state: PR_CURR, etc.		*/
-	pri16	prprio;		/* Process priority			*/
+	// pri16	prprio;		/* Process priority			*/
+	pri8	prprio;
+	tim8	prtime;
 	char	*prstkptr;	/* Saved stack pointer			*/
 	char	*prstkbase;	/* Base of run time stack		*/
 	uint32	prstklen;	/* Stack length in bytes		*/
@@ -60,3 +64,6 @@ struct procent {		/* Entry in the process table		*/
 extern	struct	procent proctab[];
 extern	int32	prcount;	/* Currently active processes		*/
 extern	pid32	currpid;	/* Currently executing process		*/
+
+#endif
+

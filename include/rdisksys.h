@@ -1,3 +1,5 @@
+#ifndef _rdisksys_H
+#define _rdisksys_H
 /* rdisksys.h - definitions for remote disk system pseudo-devices */
 
 #ifndef	Nrds
@@ -233,3 +235,6 @@ struct	rd_msg_dres	{		/* Remote file delete response	*/
 	RD_MSG_HDR			/* Header fields		*/
 };
 #pragma pack()
+
+#endif
+

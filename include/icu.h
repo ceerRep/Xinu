@@ -1,3 +1,5 @@
+#ifndef _icu_H
+#define _icu_H
 /* icu.h */
 
 #define	ICU1	0x20		/* I/O port address, 8259A #1		*/
@@ -7,3 +9,6 @@
 #define	IMR	(ICU1+1)	/* Interrupt Mask Register		*/
 
 #define	EOI	0x20		/* non-specific end of interrupt	*/
+
+#endif
+

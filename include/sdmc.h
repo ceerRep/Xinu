@@ -1,3 +1,5 @@
+#ifndef _sdmc_H
+#define _sdmc_H
 #define INTEL_QUARK_SDIO_PCI_DID	0x08A7	/* Intel Quark SDIO PCI Device ID	*/
 #define INTEL_QUARK_SDIO_PCI_VID	0x8086	/* Intel Quark SDIO MAC PCI Vendor ID	*/
 
@@ -378,3 +380,5 @@ struct sdmc_capabilities {
 devcall sdmc_issue_cmd_sync (volatile struct sdmc_csreg *csrptr, uint16 cmd_value, uint32 arg_value, uint16* error_sts, uint8 flags);
 devcall sdmc_issue_cmd_async (volatile struct sdmc_csreg *csrptr, uint16 cmd_value, uint32 arg_value);
 devcall sdmc_finalize_cmd_async (volatile struct sdmc_csreg *csrptr, uint16* error_sts);
+#endif
+

@@ -1,3 +1,5 @@
+#ifndef _rfilesys_H
+#define _rfilesys_H
 /* rfilesys.h - Definitions for remote file system pseudo-devices */
 
 #ifndef	Nrfl
@@ -327,3 +329,6 @@ struct	rfdirent	{
 	char	d_name[256];		/* Name of the file	*/
 };
 #pragma pack()
+
+#endif
+

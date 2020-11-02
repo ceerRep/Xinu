@@ -1,3 +1,5 @@
+#ifndef _udp_H
+#define _udp_H
 /* udp.h - Declarations pertaining to User Datagram Protocol (UDP) */
 
 #define	UDP_SLOTS	6 		/* Number of open UDP endpoints */
@@ -31,3 +33,6 @@ struct	udpentry {			/* Entry in the UDP endpoint tbl*/
 };
 
 extern	struct	udpentry udptab[];
+
+#endif
+

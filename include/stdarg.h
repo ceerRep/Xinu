@@ -1,3 +1,5 @@
+#ifndef _stdarg_H
+#define _stdarg_H
 /**
  * @file stdarg.h
  * @provides va_copy, va_start, va_arg, va_end.
@@ -13,3 +15,6 @@ typedef __builtin_va_list va_list;
 #define va_start(last, va)	__builtin_va_start(last, va)
 #define va_arg(va, type)	__builtin_va_arg(va, type)
 #define va_end(va)		__builtin_va_end(va)
+
+#endif
+

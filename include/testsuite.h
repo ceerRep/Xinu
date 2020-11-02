@@ -1,3 +1,5 @@
+#ifndef _testsuite_H
+#define _testsuite_H
 /* testsuite.h - failif */
 
 process	test_addargs(bool8);
@@ -36,3 +38,6 @@ extern	int	ntests;		/* total number of tests		*/
 extern	struct	testcase testtab[]; /* table of test cases		*/
 
 #define	TESTSTK	8192		/* size of process stack used for test	*/
+
+#endif
+

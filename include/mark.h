@@ -1,3 +1,5 @@
+#ifndef _mark_H
+#define _mark_H
 /* mark.h - notmarked */
 
 #define	MAXMARK	20		/* Maximum number of marked locations	*/
@@ -14,3 +16,6 @@ typedef	int32	memmark[1];	/* Declare a memory mark to be an array	*/
  *------------------------------------------------------------------------
  */
 #define	notmarked(L)		(L[0]<0 || L[0]>=nmarks || marks[L[0]]!=L)
+
+#endif
+

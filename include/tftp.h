@@ -1,3 +1,5 @@
+#ifndef _tftp_H
+#define _tftp_H
 /* tftp.h - definitions for trivial file transfer protocol */
 
 /* TFTP Packet Op codes */
@@ -64,3 +66,6 @@ struct	tftp_msg {
 #pragma pack()
 
 status tftpget(uint32, const char*, void*, uint32);
+
+#endif
+

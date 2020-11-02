@@ -1,3 +1,5 @@
+#ifndef _interrupt_H
+#define _interrupt_H
 /* interrupt.h */
 
 /* Definitions for the indirect interrupt dispatch array */
@@ -61,3 +63,6 @@ extern	uint16	girmask;	/* mask of interrupts being serviced	*/
 				/* a bit of 1 corresponds to an		*/
 				/* interrupt that is allowed.		*/
 #endif
+
+#endif
+

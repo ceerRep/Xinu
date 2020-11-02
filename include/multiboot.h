@@ -1,3 +1,5 @@
+#ifndef _multiboot_H
+#define _multiboot_H
 /* multiboot.h - definitions for the multiboot header */
 
 struct mbootinfo {
@@ -57,3 +59,6 @@ struct mbmregion {
 
 /* Usable memory region 		*/
 #define	MULTIBOOT_MMAP_TYPE_USABLE	0x00000001
+
+#endif
+

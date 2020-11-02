@@ -1,3 +1,5 @@
+#ifndef _delay_H
+#define _delay_H
 /* delay.h - DELAY */
 
 /*
@@ -21,3 +23,6 @@
 		DELAY(1000);				\
 	}						\
 }
+
+#endif
+

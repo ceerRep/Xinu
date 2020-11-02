@@ -25,10 +25,11 @@ void	clkhandler(void)
 
 	if(!isempty(sleepq)) {
 
-		/* Decrement the delay for the first process on the	*/
-		/*   sleep queue, and awaken if the count reaches zero	*/
+		for (qid16 now = firstid(sleepq), end = queuetail(sleepq); now != end; now = queuetab[now].qnext) {
+			queuetab[now].qkey--;
+		}
 
-		if((--queuetab[firstid(sleepq)].qkey) <= 0) {
+		if((queuetab[firstid(sleepq)].qkey) <= 0) {
 			wakeup();
 		}
 	}

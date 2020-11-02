@@ -1,3 +1,5 @@
+#ifndef _flash_H
+#define _flash_H
 /**
  * @file flash.h
  * This file provides various definitions and prototypes for the flash
@@ -261,3 +263,6 @@ syscall printFileStats(struct file *, char *, char *, int, int);
 syscall freeFile(struct file *);
 
 #endif                          /* _FLASH_H_ */
+
+#endif
+

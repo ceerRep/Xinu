@@ -5,6 +5,8 @@
 #include <xinu.h>
 #include <string.h>
 
+#include "sche.h"
+
 extern	void	start(void);	/* Start of Xinu code			*/
 extern	void	*_end;		/* End of Xinu code			*/
 
@@ -171,6 +173,7 @@ static	void	sysinit()
 	prptr = &proctab[NULLPROC];
 	prptr->prstate = PR_CURR;
 	prptr->prprio = 0;
+	prptr->prtime = timeslice_from_priority(prptr->prprio);
 	strncpy(prptr->prname, "prnull", 7);
 	prptr->prstkbase = getstk(NULLSTK);
 	prptr->prstklen = NULLSTK;

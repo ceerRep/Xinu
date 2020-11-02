@@ -1,3 +1,5 @@
+#ifndef _date_H
+#define _date_H
 /* date.h - ntim2xtim, xtim2ntim, isleap, utim2ltim */
 
 /************************************************************************/
@@ -65,3 +67,6 @@ extern	struct	dateinfo Date;		/* Global date information	*/
 #endif
 
 #define	TIMETIMEOUT	2000		/* timeout for time server (ms)	*/
+
+#endif
+

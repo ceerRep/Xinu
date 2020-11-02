@@ -1,3 +1,5 @@
+#ifndef _queue_H
+#define _queue_H
 /* queue.h - firstid, firstkey, isempty, lastkey, nonempty		*/
 
 /* Queue structure declarations, constants, and inline functions	*/
@@ -25,7 +27,9 @@ extern	struct qentry	queuetab[];
 #define	queuehead(q)	(q)
 #define	queuetail(q)	((q) + 1)
 #define	firstid(q)	(queuetab[queuehead(q)].qnext)
+#define nextid(q)   (queuetab[q].qnext)
 #define	lastid(q)	(queuetab[queuetail(q)].qprev)
+#define previd(q)	(queuetab[q].qprev)
 #define	isempty(q)	(firstid(q) >= NPROC)
 #define	nonempty(q)	(firstid(q) <  NPROC)
 #define	firstkey(q)	(queuetab[firstid(q)].qkey)
@@ -34,3 +38,6 @@ extern	struct qentry	queuetab[];
 /* Inline to check queue id assumes interrupts are disabled */
 
 #define	isbadqid(x)	(((int32)(x) < NPROC) || (int32)(x) >= NQENT-1)
+
+#endif
+

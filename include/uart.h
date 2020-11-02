@@ -1,3 +1,5 @@
+#ifndef _uart_H
+#define _uart_H
 /* uart.h - definintions for the NS16550 uart serial hardware */
 
 #define UART_BAUD	115200	/* Default console baud rate.		*/
@@ -87,3 +89,6 @@ struct	uart_csreg
 #define	UART_LSR_BI	0x10	/* Break interrupt indicator		*/
 #define UART_LSR_THRE	0x20	/* Transmit-hold-register empty		*/
 #define UART_LSR_TEMT	0x40	/* Transmitter empty			*/
+
+#endif
+

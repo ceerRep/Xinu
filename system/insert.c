@@ -12,6 +12,7 @@ status	insert(
 	  int32		key		/* Key for the inserted process	*/
 	)
 {
+	// kprintf("Insert: %d %d\n", pid, key);
 	qid16	curr;			/* Runs through items in a queue*/
 	qid16	prev;			/* Holds previous node index	*/
 

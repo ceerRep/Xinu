@@ -1,3 +1,5 @@
+#ifndef _arp_H
+#define _arp_H
 /* arp.h */
 
 /* Items related to ARP - definition of cache and the packet format */
@@ -48,3 +50,6 @@ struct	arpentry {			/* Entry in the ARP cache	*/
 };
 
 extern struct	arpentry arpcache[];
+
+#endif
+

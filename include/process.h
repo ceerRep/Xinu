@@ -45,8 +45,8 @@
 struct procent {		/* Entry in the process table		*/
 	uint16	prstate;	/* Process state: PR_CURR, etc.		*/
 	// pri16	prprio;		/* Process priority			*/
-	pri8	prprio;
-	tim8	prtime;
+	pri16	prprio;
+	tim32	prtime;
 	char	*prstkptr;	/* Saved stack pointer			*/
 	char	*prstkbase;	/* Base of run time stack		*/
 	uint32	prstklen;	/* Stack length in bytes		*/
@@ -66,4 +66,3 @@ extern	int32	prcount;	/* Currently active processes		*/
 extern	pid32	currpid;	/* Currently executing process		*/
 
 #endif
-

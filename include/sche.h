@@ -6,22 +6,24 @@
 #include "kernel.h"
 #include "process.h"
 
+extern int kcycle_per_tick;
+
 #define timeslice_from_priority(prio)                                          \
     ({                                                                         \
-        tim8 slice;                                                            \
+        tim32 slice;                                                           \
         switch (prio)                                                          \
         {                                                                      \
         case -127 ... 0:                                                       \
             slice = -1;                                                        \
             break;                                                             \
         case 1 ... 10:                                                         \
-            slice = 10;                                                        \
+            slice = 10 * kcycle_per_tick;                                       \
             break;                                                             \
         case 11 ... 20:                                                        \
-            slice = 20;                                                        \
+            slice = 20 * kcycle_per_tick;                                       \
             break;                                                             \
         default:                                                               \
-            slice = 30;                                                        \
+            slice = 30 * kcycle_per_tick;                                       \
         }                                                                      \
         slice;                                                                 \
     })

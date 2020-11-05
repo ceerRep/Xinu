@@ -9,6 +9,7 @@ typedef	unsigned char	byte;
 typedef	unsigned char	uint8;
 typedef	int		 int32;
 typedef	short	 int16;
+typedef long long int64;
 typedef	unsigned int	uint32;
 typedef	unsigned short	uint16;
 typedef	unsigned long long uint64;
@@ -24,7 +25,7 @@ typedef	uint32	umsg32;		/* message passed among processes	*/
 typedef	int32	bpid32;		/* buffer pool ID			*/
 typedef	byte	bool8;		/* Boolean type				*/
 typedef int8   pri8;		/* process priority			*/
-typedef int8   tim8;		/* process time				*/
+typedef int32   tim32;		/* process time				*/
 typedef	uint32	intmask;	/* saved interrupt mask			*/
 typedef	int32	ibid32;		/* index block ID (used in file system)	*/
 typedef	int32	dbid32;		/* data block ID (used in file system)	*/
@@ -78,4 +79,3 @@ syscall	kputc(byte);
 syscall	kgetc(void);
 
 #endif
-

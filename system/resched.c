@@ -3,6 +3,7 @@
 #include <xinu.h>
 #include <queue.h>
 #include <sche.h>
+#include <clock.h>
 #include <process.h>
 
 struct	defer	Defer;
@@ -14,13 +15,21 @@ extern int proccnt[];
  */
 void	resched(void)		/* Assumes interrupts are disabled	*/
 {
-	if (currpid != NULLPROC) {
-		proctab[currpid].prtime -= QUANTUM;
-		if (proctab[currpid].prtime < 0)
-			proctab[currpid].prtime = 0;
-	}
+	static bool8 prev_tick_initialized = 0;
+	static int64 prev_tick = 0;
+	if (prev_tick_initialized)
+    {
+		int64 now_tick = getticks();
+		int64 diff_tick = now_tick - prev_tick;
+        if (currpid != NULLPROC)
+        {
+            proctab[currpid].prtime -= diff_tick >> 10;
+            if (proctab[currpid].prtime < 0)
+                proctab[currpid].prtime = 0;
+        }
+    }
 
-	struct procent *ptold;	/* Ptr to table entry for old process	*/
+    struct procent *ptold;	/* Ptr to table entry for old process	*/
 	struct procent *ptnew;	/* Ptr to table entry for new process	*/
 
 	/* If rescheduling is deferred, record attempt and return */
@@ -46,18 +55,18 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	{
 		if (proctab[firstid(readylist)].prtime == 0) {
 			pid32 pid;
-			qid16 now = firstid(readylist), last = lastid(readylist);
+			qid16 now = firstid(readylist);
 
 			do {
 				pid = now;
 				proctab[pid].prtime = timeslice_from_priority(proctab[pid].prprio);
 				queuetab[now].qkey = proctab[pid].prtime;
 				now = queuetab[now].qnext;
-			} while (last != now);
+			} while (queuetail(readylist) != now);
 		}
 
 		// Insertion Sort
-		// Not need
+		// Not need ?
 
 		qid16 now = firstid(readylist);
 		firstid(readylist) = queuetail(readylist);
@@ -72,14 +81,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	/* Force context switch to highest time ready process */
 	currpid = dequeue(readylist);
 
-	kprintf("Resched to [%d] %s\n", currpid, proctab[currpid].prname);
-	for(int i = 0; i < 16; i++)
-		if (proctab[i].prstate != PR_FREE)
-			kprintf("%s [%d] %d\n", proctab[i].prname, i, proccnt[i]);
+	// kprintf("Resched to [%d] %s\n", currpid, proctab[currpid].prname);
 
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
+
+	prev_tick = getticks();
+	prev_tick_initialized = 1;
 
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
 

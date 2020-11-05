@@ -6,9 +6,24 @@
  * clkhandler - high level clock interrupt handler
  *------------------------------------------------------------------------
  */
+
+int kcycle_per_tick = -1;
+
 void	clkhandler(void)
 {
 	/* Decrement the ms counter, and see if a second has passed */
+
+	static uint32 last_clkhandler_called = 0;
+	uint32 now_tick = getticks();
+
+    if (kcycle_per_tick >= 0)
+    {
+		kcycle_per_tick = (now_tick - last_clkhandler_called) / 1000;
+    }
+    else
+        kcycle_per_tick = 0;
+
+    last_clkhandler_called = now_tick;
 
 	if((++count1000) >= 1000) {
 

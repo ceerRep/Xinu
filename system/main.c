@@ -14,26 +14,34 @@ _Noreturn process Worker(void)
     }
 }
 
-process main(void)
+process  main(void)
 {
+  pid32 pids[4];
+  pids[0] = create(Worker, 8192, 10, "1", 1, 0);
+  pids[1] = create(Worker, 8192, 10, "2", 1, 1);
+  pids[2] = create(Worker, 8192, 20, "3", 1, 2);
+  pids[3] = create(Worker, 8192, 30, "4", 1, 3);
 
-    /* Run the Xinu shell */
+  for (uint32 i = 0; i < sizeof(pids) / sizeof(pid32); i++)
+    resume(pids[i]);
 
-    // recvclr();
-    // resume(create(shell, 8192, 50, "shell", 1, CONSOLE));
+  kprintf("\x1b[s");
 
-    // /* Wait for shell to exit and recreate it */
+  while (1) {
+    intmask mask = disable();
 
-    // while (TRUE) {
-    // 	receive();
-    // 	sleepms(200);
-    // 	kprintf("\n\nMain process recreating shell\n\n");
-    // 	resume(create(shell, 4096, 20, "shell", 1, CONSOLE));
-    // }
+    // Print statistics
+    kprintf("\x1b[u------------------\n");
+    
+	for(int i = 0; i < 16; i++)
+		if (proctab[i].prstate != PR_FREE)
+			kprintf("%s [%d] %d\n", proctab[i].prname, i, proccnt[i]);
+    kprintf("------------------\n");
 
-    resume(create(Worker, 4096, 10, "A1", 0));
-    resume(create(Worker, 4096, 10, "A2", 0));
-    resume(create(Worker, 4096, 20, "B", 0));
-    resume(create(Worker, 4096, 30, "C", 0));
-    return OK;
+    restore(mask);
+
+    yield();
+  }
+
+  return OK;
 }

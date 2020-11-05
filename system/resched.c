@@ -8,6 +8,38 @@
 
 struct	defer	Defer;
 extern int proccnt[];
+extern int proctype[];
+
+int64 time_used;
+
+void calc_proc_type(pid32 pid)
+{
+	if (proctype[pid] & 0b100)
+    {
+        int64 tmp = time_used;
+		for (int i = 0; i < NPROC; i++)
+		{
+			if (proctab[i].prstate == PR_READY)
+			{
+				if (proctype[i] && !(proctype[i] & 0b100))
+				{
+					tmp += proctab[i].prtime * ((proctype[i] & 1) ? 1 : -1);
+				}
+			}
+		}
+
+		// kprintf("%d %d\n", (int)tmp, proctype[pid]);
+
+		if (tmp > 0) 
+		{
+			proctype[currpid] &= ~1;
+		}
+		else if (tmp < 0)
+		{
+			proctype[currpid] |= 1;
+		}
+    }
+}
 
 /*------------------------------------------------------------------------
  *  resched  -  Reschedule processor to highest priority eligible process
@@ -21,9 +53,12 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
     {
 		int64 now_tick = getticks();
 		int64 diff_tick = now_tick - prev_tick;
+		diff_tick >>= 10;
+		if (proctype[currpid])
+            time_used += diff_tick * ((proctype[currpid] & 1) ? 1 : -1);
         if (currpid != NULLPROC)
         {
-            proctab[currpid].prtime -= diff_tick >> 10;
+            proctab[currpid].prtime -= diff_tick;
             if (proctab[currpid].prtime < 0)
                 proctab[currpid].prtime = 0;
         }
@@ -54,8 +89,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	/* Check time slice */
 	{
 		if (proctab[firstid(readylist)].prtime == 0) {
+			time_used = 0;
+
 			pid32 pid;
 			qid16 now = firstid(readylist);
+
+			for (pid = 0; pid < NPROC; pid++)
+				if (proctab[pid].prstate != PR_FREE && proctab[pid].prprio > 0)
+					proctab[pid].prprio = 40 - proctab[pid].prprio;
 
 			do {
 				pid = now;
@@ -87,6 +128,7 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
 
+	calc_proc_type(currpid);
 	prev_tick = getticks();
 	prev_tick_initialized = 1;
 

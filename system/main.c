@@ -2,46 +2,125 @@
 
 #include <xinu.h>
 
-int proccnt[NPROC] = {0};
+#define NUM 10
+#define MAX_FOOD_COUNT 20000
 
-_Noreturn process Worker(void)
+pid32 procs[NUM * 3];
+int proctype[NPROC] = {0};
+long long proccnt[NPROC] = {0};
+long long proccntabs[NPROC] = {0};
+
+sid32 food_need;
+
+extern long long time_used;
+
+void _Noreturn C()
 {
     while (1)
     {
-        for (register uint32 i = 0; i < 100000; i++)
-            proccnt[currpid]++;
-		sleepms(2);
+        for (register uint32 i = 0; i < 10000; i++)
+        {
+            if (semcount(food_need) < MAX_FOOD_COUNT)
+            {
+                signal(food_need);
+                proccnt[currpid]++;
+                proccntabs[currpid]++;
+            }
+            else yield();
+        }
     }
 }
 
-process  main(void)
+void _Noreturn P()
 {
-  pid32 pids[4];
-  pids[0] = create(Worker, 8192, 10, "1", 1, 0);
-  pids[1] = create(Worker, 8192, 10, "2", 1, 1);
-  pids[2] = create(Worker, 8192, 20, "3", 1, 2);
-  pids[3] = create(Worker, 8192, 30, "4", 1, 3);
+    while (1)
+    {
+        for (register uint32 i = 0; i < 10000; i++)
+        {
+            wait(food_need);
+            proccnt[currpid]++;
+            proccntabs[currpid]++;
+        }
+    }
+}
 
-  for (uint32 i = 0; i < sizeof(pids) / sizeof(pid32); i++)
-    resume(pids[i]);
+void _Noreturn S()
+{
+    while (1)
+    {
+        for (register uint32 i = 0; i < 10000; i++)
+        {
+            if (proctype[currpid] & 1) // P
+            {
+                wait(food_need);
+                proccnt[currpid]++;
+                proccntabs[currpid]++;
+            }
+            else // C
+            {
+                while (semcount(food_need) > MAX_FOOD_COUNT)
+                    sleepms(1);
+                signal(food_need);
+                proccnt[currpid]--;
+                proccntabs[currpid]++;
+            }
+        }
+    }
+}
 
-  kprintf("\x1b[s");
+process main(void)
+{
+    food_need = semcreate(MAX_FOOD_COUNT / 2);
 
-  while (1) {
+    for (int i = 0; i < NUM; i++)
+    {
+        procs[i] = create(C, 8192, 30, "C", 0);
+        proctype[procs[i]] = 0b10;
+    }
+
+    for (int i = 0; i < NUM; i++)
+    {
+        procs[NUM + i] = create(P, 8192, 20, "P", 0);
+        proctype[procs[NUM + i]] = 0b11;
+    }
+
+    for (int i = 0; i < NUM; i++)
+    {
+        procs[2 * NUM + i] = create(S, 8192, 10, "S", 0);
+        proctype[procs[2 * NUM + i]] = 0b111;
+    }
+
     intmask mask = disable();
-
-    // Print statistics
-    kprintf("\x1b[u------------------\n");
-    
-	for(int i = 0; i < 16; i++)
-		if (proctab[i].prstate != PR_FREE)
-			kprintf("%s [%d] %d\n", proctab[i].prname, i, proccnt[i]);
-    kprintf("------------------\n");
-
+    for (int i = 0; i < NUM * 3; i++)
+        resume(procs[i]);
     restore(mask);
 
-    yield();
-  }
+    kprintf("\x1b[s");
 
-  return OK;
+    for (int rnd = 0;; rnd++)
+    {
+        long long sum[] = {0, 0, 0, 0, 0, 0, 0, 0};
+        long long sumabs[] = {0, 0, 0, 0, 0, 0, 0, 0};
+        intmask mask = disable();
+
+        // Print statistics
+        kprintf("\x1b[u%d %d\n", rnd, (int)time_used);
+
+        for (int i = 0; i < NPROC; i++)
+            if (proctab[i].prstate != PR_FREE)
+            {
+                sum[proctype[i]] += proccnt[i];
+                sumabs[proctype[i]] += proccntabs[i];
+            }
+
+        for (int i = 0; i < 8; i++)
+            kprintf("[%d] %d %d\n", i, (int)sum[i], (int)sumabs[i]);
+        kprintf("------------------\n");
+
+        restore(mask);
+
+        yield();
+    }
+
+    return OK;
 }

@@ -10,7 +10,7 @@ int proctype[NPROC] = {0};
 long long proccnt[NPROC] = {0};
 long long proccntabs[NPROC] = {0};
 
-sid32 food_need;
+sid32 food_need, food_rev;
 
 extern long long time_used;
 
@@ -18,16 +18,10 @@ void _Noreturn C()
 {
     while (1)
     {
-        for (register uint32 i = 0; i < 10000; i++)
-        {
-            if (semcount(food_need) < MAX_FOOD_COUNT)
-            {
-                signal(food_need);
-                proccnt[currpid]++;
-                proccntabs[currpid]++;
-            }
-            else yield();
-        }
+        wait(food_rev);
+        signal(food_need);
+        proccnt[currpid]++;
+        proccntabs[currpid]++;
     }
 }
 
@@ -35,12 +29,10 @@ void _Noreturn P()
 {
     while (1)
     {
-        for (register uint32 i = 0; i < 10000; i++)
-        {
-            wait(food_need);
-            proccnt[currpid]++;
-            proccntabs[currpid]++;
-        }
+        wait(food_need);
+        signal(food_rev);
+        proccnt[currpid]++;
+        proccntabs[currpid]++;
     }
 }
 
@@ -48,29 +40,27 @@ void _Noreturn S()
 {
     while (1)
     {
-        for (register uint32 i = 0; i < 10000; i++)
+        if (proctype[currpid] & 1) // P
         {
-            if (proctype[currpid] & 1) // P
-            {
-                wait(food_need);
-                proccnt[currpid]++;
-                proccntabs[currpid]++;
-            }
-            else // C
-            {
-                while (semcount(food_need) > MAX_FOOD_COUNT)
-                    sleepms(1);
-                signal(food_need);
-                proccnt[currpid]--;
-                proccntabs[currpid]++;
-            }
+            wait(food_need);
+            signal(food_rev);
+            proccnt[currpid]++;
+            proccntabs[currpid]++;
+        }
+        else // C
+        {
+            wait(food_rev);
+            signal(food_need);
+            proccnt[currpid]--;
+            proccntabs[currpid]++;
         }
     }
 }
 
 process main(void)
 {
-    food_need = semcreate(MAX_FOOD_COUNT / 2);
+    food_need = semcreate(3 * NUM / 2);
+    food_rev = semcreate(3 * NUM / 2);
 
     for (int i = 0; i < NUM; i++)
     {
@@ -86,7 +76,7 @@ process main(void)
 
     for (int i = 0; i < NUM; i++)
     {
-        procs[2 * NUM + i] = create(S, 8192, 10, "S", 0);
+        procs[2 * NUM + i] = create(S, 8192, 20, "S", 0);
         proctype[procs[2 * NUM + i]] = 0b111;
     }
 

@@ -1,3 +1,5 @@
+#ifndef _limits_H
+#define _limits_H
 /**
  * @file limits.h
  *
@@ -28,3 +30,6 @@
 #define USHRT_MAX  65535        /**< maximum value of unsigned int16    */
 
 #endif                          /* _LIMITS_H_ */
+
+#endif
+

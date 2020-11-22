@@ -1,3 +1,5 @@
+#ifndef _process_H
+#define _process_H
 /* process.h - isbadpid */
 
 /* Maximum number of processes in the system */
@@ -60,3 +62,6 @@ struct procent {		/* Entry in the process table		*/
 extern	struct	procent proctab[];
 extern	int32	prcount;	/* Currently active processes		*/
 extern	pid32	currpid;	/* Currently executing process		*/
+
+#endif
+

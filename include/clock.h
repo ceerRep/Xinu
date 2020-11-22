@@ -1,3 +1,5 @@
+#ifndef _clock_H
+#define _clock_H
 /* clock.h */
 
 /* Intel 8254-2 clock chip constants */
@@ -14,3 +16,6 @@ extern  uint32	count1000;        /* ms since last clock tick             */
 
 extern	qid16	sleepq;		/* queue for sleeping processes		*/
 extern	uint32	preempt;	/* preemption counter			*/
+
+#endif
+

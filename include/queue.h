@@ -1,3 +1,5 @@
+#ifndef _queue_H
+#define _queue_H
 /* queue.h - firstid, firstkey, isempty, lastkey, nonempty		*/
 
 /* Queue structure declarations, constants, and inline functions	*/
@@ -34,3 +36,6 @@ extern	struct qentry	queuetab[];
 /* Inline to check queue id assumes interrupts are disabled */
 
 #define	isbadqid(x)	(((int32)(x) < NPROC) || (int32)(x) >= NQENT-1)
+
+#endif
+

@@ -1,3 +1,5 @@
+#ifndef _ctype_H
+#define _ctype_H
 /* ctype.h
  *
  * Includes isalpha, isupper, islower, isdigit, isspace, ispunct, isalnum,
@@ -31,3 +33,6 @@ extern const char _ctype_[];
 #define toascii(c)   (((int)(c))&0x7F)
 
 #define iseof(c)     (0x04 == (int)c)
+
+#endif
+

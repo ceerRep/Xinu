@@ -1,3 +1,5 @@
+#ifndef _debug_H
+#define _debug_H
 /* debug.h */
 
 #define DEBUG_ASCII 0x01
@@ -6,3 +8,6 @@
 void hexdump(void *buffer, uint32 length, bool8 text);
 void debugbreak(void);
 void debugret(void);
+
+#endif
+

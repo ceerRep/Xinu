@@ -1,3 +1,5 @@
+#ifndef _ports_H
+#define _ports_H
 /* ports.h - isbadport */
 
 #define	NPORTS		30		/* Maximum number of ports	*/
@@ -27,3 +29,6 @@ extern	int32	ptnextid;		/* Next port ID to try when	*/
 					/*   looking for a free slot	*/
 
 #define	isbadport(portid)	( (portid)<0 || (portid)>=NPORTS )
+
+#endif
+

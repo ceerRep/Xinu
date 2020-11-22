@@ -1,3 +1,5 @@
+#ifndef _stdlib_H
+#define _stdlib_H
 /**
  * @file stdlib.h
  *
@@ -17,3 +19,6 @@ int rand(void);
 void srand(unsigned int);
 void *malloc(unsigned int nbytes);
 void free(void *pmem);
+
+#endif
+

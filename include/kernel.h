@@ -1,3 +1,5 @@
+#ifndef _kernel_H
+#define _kernel_H
 /* kernel.h */
 
 /* General type declarations used throughout the kernel */
@@ -71,3 +73,6 @@ extern	qid16	readylist;	/* global ID for list of ready processes*/
 syscall	kprintf(char *fmt, ...);
 syscall	kputc(byte);
 syscall	kgetc(void);
+
+#endif
+

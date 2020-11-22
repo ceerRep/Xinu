@@ -1,3 +1,5 @@
+#ifndef _tty_H
+#define _tty_H
 /* tty.h */
 
 #define	TY_OBMINSP	20		/* Min space in buffer before	*/
@@ -82,3 +84,6 @@ extern	struct	ttycblk	ttytab[];
 #define	TC_ICHARS	8		/* Return number of input chars	*/
 #define	TC_ECHO		9		/* Turn on echo			*/
 #define	TC_NOECHO	10		/* Turn off echo		*/
+
+#endif
+

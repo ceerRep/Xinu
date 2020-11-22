@@ -1,3 +1,5 @@
+#ifndef _prototypes_H
+#define _prototypes_H
 /* in file addargs.c */
 extern	status	addargs(pid32, int32, int32[], int32,char *, void *);
 
@@ -428,3 +430,6 @@ extern	syscall	yield(void);
 #define	ntohs(x)  ((0xff & ((x)>>8)) | ( (0xff & (x)) << 8))
 #define	ntohl(x)  ((((x)>>24) & 0x000000ff) | (((x)>> 8) & 0x0000ff00) | \
 		   (((x)<<8) & 0x00ff0000) | (((x)<<24) & 0xff000000))
+
+#endif
+

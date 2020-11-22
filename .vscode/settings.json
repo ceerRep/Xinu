@@ -1,0 +1,19 @@
+{
+    "C_Cpp.default.includePath": [
+        "./include"
+    ],
+    "files.associations": {
+        "*.S": "asm",
+        "xinu.h": "c",
+        "ranges": "c",
+        "iostream": "cpp",
+        "new": "cpp",
+        "exception": "cpp"
+    },
+    "C_Cpp.default.intelliSenseMode": "gcc-x86",
+    "C_Cpp.default.cppStandard": "gnu++20",
+    "C_Cpp.default.cStandard": "gnu17",
+    "C_Cpp.default.systemIncludePath": [
+        "./include"
+    ]
+}

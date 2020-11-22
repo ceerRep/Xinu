@@ -1,3 +1,5 @@
+#ifndef _memory_H
+#define _memory_H
 /* memory.h - roundmb, truncmb, freestk */
 
 #define	PAGE_SIZE	4096
@@ -36,3 +38,6 @@ extern	int	edata;			/* End of data segment		*/
 extern	int	bss;			/* Start of bss segment		*/
 extern	int	ebss;			/* End of bss segment		*/
 extern	int	end;			/* End of program		*/
+
+#endif
+

@@ -19,12 +19,13 @@ PLAT		=	Platform_$(PNAME)
 TOPDIR		=	..
 
 CC		=	${COMPILER_ROOT}gcc
+CXX     =   ${COMPILER_ROOT}g++
 LD		=	${COMPILER_ROOT}ld
 OBJCOPY		=	${COMPILER_ROOT}objcopy
 XINU		=	$(TOPDIR)/compile/xinu.elf
 BUILDMAKE	=	$(TOPDIR)/compile/bin/build-make
 
-MAKEDEP		=	$(CC) -M -MG
+MAKEDEP		=	$(CXX) -M -MG
 
 DEPSFILE	=	.deps
 DEFSFILE	=	.defs
@@ -44,8 +45,10 @@ INCLUDE		=	-I$(TOPDIR)/include
 DEFS		= 	-DBSDURG -DVERSION=\""`cat $(VERSIONFILE)`"\"
 
 # Compiler flags
-# CFLAGS  = -march=i586 -m32 -ggdb -fno-builtin -fno-stack-protector -nostdlib -c -Wall -O0 ${DEFS} ${INCLUDE}
-CFLAGS  = -march=i586 -m32 -fno-builtin -fno-stack-protector -nostdlib -c -Wall -O0 ${DEFS} ${INCLUDE}
+WARNS = -Wall -Werror -Wno-shift-overflow -Wno-unused-variable -Wno-sign-compare
+CFLAGS  = -march=i586 -m32 -ggdb -ffreestanding -fno-stack-protector -mno-red-zone -nostdlib -c ${WARNS} -O0 ${DEFS} ${INCLUDE}
+CXXFLAGS  = -march=i586 -std=gnu++17 -m32 -ggdb -mgeneral-regs-only -ffreestanding -fno-exceptions -fno-rtti -fno-stack-protector -mno-red-zone -nostdlib -c ${WARNS} -O0 ${DEFS} ${INCLUDE}
+# CFLAGS  = -march=i586 -m32 -fno-builtin -fno-stack-protector -mno-red-zone -nostdlib -c -Wall -O0 ${DEFS} ${INCLUDE}
 SFLAGS  = ${INCLUDE}
 
 # Loader flags

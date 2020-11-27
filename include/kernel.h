@@ -7,8 +7,10 @@
 typedef	unsigned char	byte;
 typedef	unsigned char	uint8;
 typedef	int		int32;
+typedef	int		intptr;
 typedef	short		int16;
 typedef	unsigned int	uint32;
+typedef unsigned int	uintptr;
 typedef	unsigned short	uint16;
 typedef	unsigned long long uint64;
 
@@ -35,6 +37,8 @@ typedef int32	shellcmd;	/* shell command declaration		*/
 typedef int32	process;	/* top-level function of a process	*/
 typedef	void	interrupt;	/* interrupt procedure			*/
 typedef	int32	status;		/* returned status value (OK/SYSERR)	*/
+
+typedef void*   HANDLE;
 
 #define local	static		/* Local procedure or variable declar.	*/
 
@@ -70,9 +74,12 @@ extern	qid16	readylist;	/* global ID for list of ready processes*/
 
 /* Prototypes of I/O functions used throughout the kernel */
 
-syscall	kprintf(char *fmt, ...);
+syscall	kprintf(const char *fmt, ...);
 syscall	kputc(byte);
 syscall	kgetc(void);
 
-#endif
+#define offsetof(type, member) ((intptr)&((type *)0)->member)
+#define ALIGN_CEIL(p, a) (((uintptr)(p) + (a)-1) / (a) * (a))
+#define ALIGN_FLOOR(p, a) (((uintptr)(p)) / (a) * (a))
 
+#endif

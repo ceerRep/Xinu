@@ -20,7 +20,7 @@ static void _prtdbl(double num, int precision, char *str);
  *------------------------------------------------------------------------
  */
 void	_doprnt(
-	  char			*fmt,
+	  const char	*fmt,
 	  va_list		ap,
 	  int			(*func)(int)
 	)

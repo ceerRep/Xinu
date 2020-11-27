@@ -29,7 +29,11 @@ syscall	kill(
 	for (i=0; i<3; i++) {
 		close(prptr->prdesc[i]);
 	}
-	freestk(prptr->prstkbase, prptr->prstklen);
+	// freestk(prptr->prstkbase, prptr->prstklen);
+
+	for (int i = 0; i < PROC_SEGMENT_COUNT; i++)
+		if (prptr->procVMInfo->segments[i].segment)
+			segmentDecRef(prptr->procVMInfo->segments[i].segment);
 
 	switch (prptr->prstate) {
 	case PR_CURR:
@@ -53,6 +57,9 @@ syscall	kill(
 	default:
 		prptr->prstate = PR_FREE;
 	}
+
+	// Free VMInfo
+	freeVMInfo(prptr->procVMInfo);
 
 	restore(mask);
 	return OK;

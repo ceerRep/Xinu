@@ -4,6 +4,9 @@
 
 local	int newpid();
 
+#define PROCESS_STACK_VA_1 0xF0000000
+#define PROCESS_STACK_VA_2 0xD0000000
+
 /*------------------------------------------------------------------------
  *  create  -  Create a process to start running a function on x86
  *------------------------------------------------------------------------
@@ -29,12 +32,15 @@ pid32	create(
 	if (ssize < MINSTK)
 		ssize = MINSTK;
 	ssize = (uint32) roundmb(ssize);
-	if ( (priority < 1) || ((pid=newpid()) == SYSERR) ||
-	     ((saddr = (uint32 *)getstk(ssize)) == (uint32 *)SYSERR) ) {
+	if ( (priority < 1) || ((pid=newpid()) == SYSERR) ) {
 		restore(mask);
 		return SYSERR;
 	}
 
+	uintptr stack_base_addr = (((uintptr)&pid) & 0xF0000000) == PROCESS_STACK_VA_1
+								  ? PROCESS_STACK_VA_2
+								  : PROCESS_STACK_VA_1;
+	saddr = (void *)(stack_base_addr + ssize);
 	prcount++;
 	prptr = &proctab[pid];
 
@@ -54,6 +60,10 @@ pid32	create(
 	prptr->prdesc[0] = CONSOLE;
 	prptr->prdesc[1] = CONSOLE;
 	prptr->prdesc[2] = CONSOLE;
+
+	/* Initilize VM info */
+	createNewSegment(ssize, (void *)stack_base_addr);
+	prptr->procVMInfo = processVMInfoFactory(proctab[currpid].procVMInfo);
 
 	/* Initialize stack as if the process was called		*/
 
@@ -93,6 +103,10 @@ pid32	create(
 	*--saddr = 0;			/* %esi */
 	*--saddr = 0;			/* %edi */
 	*pushsp = (unsigned long) (prptr->prstkptr = (char *)saddr);
+
+	detachSegmentFrom(pid, (void *)(((uintptr)&pid) & 0xF0000000));
+	detachSegment((void *)stack_base_addr);
+
 	restore(mask);
 	return pid;
 }

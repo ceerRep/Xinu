@@ -36,6 +36,7 @@ uint16	girmask;
 #define NID		48	/* Number of interrupt descriptors	*/
 #define	IGDT_TRAPG	15	/* Trap Gate				*/
 #define	IGDT_INTRG	0xe	/* Interrupt Gate			*/
+#define	IGDT_TASKG	0x5	/* Task Gate				*/
 
 void	_8259_setirmask(void);	/* Set interrupt mask			*/
 
@@ -113,6 +114,22 @@ int32	set_evec(uint32 xnum, uint32 handler)
 	}
 
     return OK;
+}
+
+int32 set_task_evec(uint32 xnum, uint32 handler)
+{
+	struct idt *pidt;
+
+	pidt = &idt[xnum];
+	pidt->igd_loffset = 0; // Unused
+	pidt->igd_segsel = handler;
+	pidt->igd_mbz = 0;
+	pidt->igd_type = IGDT_TASKG;
+	pidt->igd_dpl = 0;
+	pidt->igd_present = 1;
+	pidt->igd_hoffset = handler >> 16; // Unused
+
+	return OK;
 }
 
 

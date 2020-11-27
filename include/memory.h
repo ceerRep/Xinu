@@ -3,6 +3,7 @@
 /* memory.h - roundmb, truncmb, freestk */
 
 #define	PAGE_SIZE	4096
+#define FAT_PAGE_SIZE 4194304
 
 /*----------------------------------------------------------------------
  * roundmb, truncmb - Round or truncate address to memory block size
@@ -40,4 +41,3 @@ extern	int	ebss;			/* End of bss segment		*/
 extern	int	end;			/* End of program		*/
 
 #endif
-

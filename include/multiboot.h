@@ -33,11 +33,6 @@ struct mbmregion {
 	uint32	type;			/* Memory region type		*/
 };
 
-void mbm_test(struct mbmregion* reg)
-{
-	asm("nop");
-}
-
 /* Multiboot header magic number	*/
 #define	MULTIBOOT_HEADER_MAGIC  	0x1BADB002
 
@@ -66,4 +61,3 @@ void mbm_test(struct mbmregion* reg)
 #define	MULTIBOOT_MMAP_TYPE_USABLE	0x00000001
 
 #endif
-

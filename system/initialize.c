@@ -8,6 +8,9 @@
 extern	void	start(void);	/* Start of Xinu code			*/
 extern	void	*_end;		/* End of Xinu code			*/
 
+extern  void    (*ctors[0])();
+extern  void    (*ectors[0])();
+
 /* Function prototypes */
 
 extern	void main(void);	/* Main is the first process created	*/
@@ -54,17 +57,7 @@ void	nulluser()
 	sysinit();
 
 	/* Output Xinu memory layout */
-	free_mem = 0;
-	for (memptr = memlist.mnext; memptr != NULL;
-						memptr = memptr->mnext) {
-		free_mem += memptr->mlength;
-	}
-	
-	kprintf("%10d bytes of free memory.  Free list:\n", free_mem);
-	for (memptr=memlist.mnext; memptr!=NULL;memptr = memptr->mnext) {
-	    kprintf("           [0x%08X to 0x%08X]\n",
-		(uint32)memptr, ((uint32)memptr) + memptr->mlength - 1);
-	}
+	kprintf("%10d free pages of\n%10d total.\n", PManager->free_pages, PManager->all_pages);
 
 	kprintf("%10d bytes of Xinu code.\n",
 		(uint32)&etext - (uint32)&text);
@@ -141,10 +134,16 @@ static	void	sysinit()
 	/* Initialize the interrupt vectors */
 
 	initevec();
-	
+
+	/* Call ctors */
+	for (int i = 0; ctors + i != ectors; i++)
+		ctors[i]();
+
 	/* Initialize free memory list */
 	
 	meminit();
+	vminit();
+	tssinit();
 
 	/* Initialize system variables */
 
@@ -172,11 +171,20 @@ static	void	sysinit()
 	prptr->prstate = PR_CURR;
 	prptr->prprio = 0;
 	strncpy(prptr->prname, "prnull", 7);
-	prptr->prstkbase = getstk(NULLSTK);
+	prptr->prstkbase = (void *)0xA0000;
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
+	prptr->procVMInfo = processVMInfoFactory(NULL);
+
 	currpid = NULLPROC;
-	
+	asm("mov %%eax, %%cr3\n\t"
+		:
+		: "a"(&KERNEL_PGDIR_AT(prptr->procVMInfo->pgDirNo))
+		:);
+
+	// createNewSegment(4 << 20, (void *)0x55800000);
+	// *(int *)0x55AA55AA = 0xCCCCCCCC;
+
 	/* Initialize semaphores */
 
 	for (i = 0; i < NSEM; i++) {

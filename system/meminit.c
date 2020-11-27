@@ -30,7 +30,7 @@ struct __attribute__ ((__packed__)) sd {
 	unsigned char	sd_hibase;
 };
 
-#define	NGD			4	/* Number of global descriptor entries	*/
+#define	NGD			6	/* Number of global descriptor entries	*/
 #define FLAGS_GRANULARITY	0x80
 #define FLAGS_SIZE		0x40
 #define	FLAGS_SETTINGS		(FLAGS_GRANULARITY | FLAGS_SIZE)
@@ -45,6 +45,9 @@ struct sd gdt_copy[NGD] = {
 {       0xffff,          0,           0,      0x92,         0xcf,        0, },
 /* 3rd, Kernel Stack Segment */
 {       0xffff,          0,           0,      0x92,         0xcf,        0, },
+/* 4th, Kernel TSS */
+{},
+{}
 };
 
 extern	struct	sd gdt[];	/* Global segment table			*/
@@ -171,6 +174,22 @@ void	setsegs()
 	psd = &gdt_copy[3];	/* Kernel stack segment */
 	psd->sd_lolimit = ds_end;
 	psd->sd_hilim_fl = FLAGS_SETTINGS | ((ds_end >> 16) & 0xff);
+
+	psd = &gdt_copy[4]; /* Kernel TSS */
+	psd->sd_lolimit = sizeof(tss_t);
+	psd->sd_lobase = (uintptr)&kernel_tss;
+	psd->sd_midbase = ((uintptr)&kernel_tss) >> 16;
+	psd->sd_access = 0x89;
+	psd->sd_hilim_fl = FLAGS_SIZE;
+	psd->sd_hibase = ((uintptr)&kernel_tss) >> 24;
+
+	psd = &gdt_copy[5]; /* Page Fault TSS */
+	psd->sd_lolimit = sizeof(tss_t);
+	psd->sd_lobase = (uintptr)&page_fault_tss;
+	psd->sd_midbase = ((uintptr)&page_fault_tss) >> 16;
+	psd->sd_access = 0x89;
+	psd->sd_hilim_fl = FLAGS_SIZE;
+	psd->sd_hibase = ((uintptr)&page_fault_tss) >> 24;
 
 	memcpy(gdt, gdt_copy, sizeof(gdt_copy));
 }

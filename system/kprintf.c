@@ -89,13 +89,13 @@ syscall kgetc(void)
 	return c;
 }
 
-extern	void	_doprnt(char *, va_list ap, int (*)(int));
+extern	void	_doprnt(const char *, va_list ap, int (*)(int));
 
 /*------------------------------------------------------------------------
  * kprintf  -  use polled I/O to print formatted output on the console
  *------------------------------------------------------------------------
  */
-syscall kprintf(char *fmt, ...)
+syscall kprintf(const char *fmt, ...)
 {
 	va_list ap;
 

@@ -31,12 +31,17 @@ disable:
  *------------------------------------------------------------------------
  */
 restore:
-        cli
-        movw    4(%esp),%ax
+	cli
+	movw    4(%esp),%ax
 	andl	$0x00000200,%eax
-	pushl	%eax
+	push	%ebx
+	pushfl
+	popl	%ebx
+	orl		%eax, %ebx
+	pushl	%ebx
 	popfl
-        ret
+	popl	%ebx
+	ret
 
 /*------------------------------------------------------------------------
  * enable  -  Enable all interrupts

@@ -1,6 +1,8 @@
-#ifndef _xinu_H
-#define _xinu_H
 /* xinu.h - include all system header files */
+
+#if __cplusplus
+extern "C" {
+#endif
 
 #include <kernel.h>
 #include <conf.h>
@@ -28,7 +30,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <vm.h>
+#include <heap.h>
+#include <tss.h>
 
-
+#if __cplusplus
+}
 #endif
-

@@ -10,6 +10,9 @@ struct	defer	Defer;
  */
 void	resched(void)		/* Assumes interrupts are disabled	*/
 {
+	intmask mask = disable();
+
+	volatile static pid32 oldpid = -1;
 	struct procent *ptold;	/* Ptr to table entry for old process	*/
 	struct procent *ptnew;	/* Ptr to table entry for new process	*/
 
@@ -37,11 +40,25 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	/* Force context switch to highest priority ready process */
 
+	oldpid = currpid;
 	currpid = dequeue(readylist);
+	vmEnterProcess(currpid);
+
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
-	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
+
+	restore(mask);
+	ctxsw(&ptold->prstkptr, &ptnew->prstkptr, &KERNEL_PGDIR_AT(ptnew->procVMInfo->pgDirNo));
+
+	if (oldpid != -1)
+	{	
+		vmLeaveProcess(oldpid);
+		if (proctab[oldpid].prstate == PR_FREE) // Suicide
+		{
+			freeVMInfo(proctab[oldpid].procVMInfo);
+		}
+	}
 
 	/* Old process returns here when resumed */
 

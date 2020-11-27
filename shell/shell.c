@@ -21,6 +21,7 @@ const	struct	cmdent	cmdtab[] = {
 	{"memstat",	FALSE,	xsh_memstat},
 	{"ps",		FALSE,	xsh_ps},
 	{"sleep",	FALSE,	xsh_sleep},
+	{"sort",	FALSE,	xsh_sort},
 	{"uptime",	FALSE,	xsh_uptime},
 	{"?",		FALSE,	xsh_help}
 
@@ -279,11 +280,16 @@ process	shell (
 		/* If creation or argument copy fails, report error */
 
 		if ((child == SYSERR) ||
-		    (addargs(child, ntok, tok, tlen, tokbuf, &tmparg)
-							== SYSERR) ) {
+			(attachRemoteSegment(child,
+								 proctab[child].prstkbase - proctab[child].prstklen,
+								 proctab[child].prstkbase - proctab[child].prstklen) == NULL) ||
+			(addargs(child, ntok, tok, tlen, tokbuf, &tmparg) == SYSERR))
+		{
 			fprintf(dev, SHELL_CREATMSG);
 			continue;
 		}
+
+		detachSegment(proctab[child].prstkbase - proctab[child].prstklen);
 
 		/* Set stdinput and stdoutput in child to redirect I/O */
 

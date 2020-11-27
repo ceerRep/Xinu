@@ -35,7 +35,7 @@ extern	syscall	control(did32, int32, int32, int32);
 extern	pid32	create(void *, uint32, pri16, char *, uint32, ...);
 
 /* in file ctxsw.S */
-extern	void	ctxsw(void *, void *);
+extern	void	ctxsw(void *, void *, void *);
 
 /* in file exit.c */
 extern	void	exit(void);
@@ -245,7 +245,7 @@ extern	qid16	newqueue(void);
 extern	syscall	open(did32, char *, char *);
 
 /* in file panic.c */
-extern	void	panic(char *);
+extern	void	panic(const char *);
 
 /* in file platinit.c */
 extern	void	platinit(void);
@@ -432,4 +432,3 @@ extern	syscall	yield(void);
 		   (((x)<<8) & 0x00ff0000) | (((x)<<24) & 0xff000000))
 
 #endif
-

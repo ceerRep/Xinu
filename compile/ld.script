@@ -31,13 +31,6 @@ SECTIONS
     *(COMMON)                   /* extra sections that are common       */
     ebss = ABSOLUTE(.) ;        /* ebss: end of bss                     */
   }
-  .trash :
-  {
-    . = ALIGN(4096); 
-    end = ABSOLUTE(.);          /* end: end of image                    */
-    _end = ABSOLUTE(.);         /* _end: end of image                   */
-    . = ALIGN(4096);
-  }
   /* Stabs debugging sections.  */
   .stab          0 : { *(.stab) }
   .stabstr       0 : { *(.stabstr) }
@@ -80,4 +73,12 @@ SECTIONS
   .debug_addr     0 : { *(.debug_addr) }
   .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
+
+  . = ALIGN(4096);
+  kernel_vm_heap_start = ABSOLUTE(.);
+  . = ALIGN(4096 * 1024);
+  kernel_pg_pos = ABSOLUTE(.);
+  . = . + 4096 * 1024;
+  end = ABSOLUTE(.);          /* end: end of image                    */
+  _end = ABSOLUTE(.);         /* _end: end of image                   */
 }

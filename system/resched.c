@@ -40,6 +40,15 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	/* Force context switch to highest priority ready process */
 
+	if (oldpid != -1)
+	{	
+		vmLeaveProcess(oldpid);
+		if (proctab[oldpid].prstate == PR_FREE) // Suicide
+		{
+			freeVMInfo(proctab[oldpid].procVMInfo);
+		}
+	}
+
 	oldpid = currpid;
 	currpid = dequeue(readylist);
 	vmEnterProcess(currpid);
@@ -50,15 +59,6 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	restore(mask);
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr, &KERNEL_PGDIR_AT(ptnew->procVMInfo->pgDirNo));
-
-	if (oldpid != -1)
-	{	
-		vmLeaveProcess(oldpid);
-		if (proctab[oldpid].prstate == PR_FREE) // Suicide
-		{
-			freeVMInfo(proctab[oldpid].procVMInfo);
-		}
-	}
 
 	/* Old process returns here when resumed */
 

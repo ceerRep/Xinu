@@ -111,6 +111,7 @@ void HeapFree(HANDLE hHeap, void *mem)
                 {
                     // Merge prev
                     prev->size += node->size;
+                    prev->next = node->next;
                     node = prev;
                 }
             }

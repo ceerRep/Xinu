@@ -33,6 +33,9 @@ extern "C" {
 #include <vm.h>
 #include <heap.h>
 #include <tss.h>
+#include <v8086.h>
+#include <vga.h>
+#include <kbd.h>
 
 #if __cplusplus
 }

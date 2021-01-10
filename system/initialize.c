@@ -144,6 +144,7 @@ static	void	sysinit()
 	meminit();
 	vminit();
 	tssinit();
+	v8086_init();
 
 	/* Initialize system variables */
 

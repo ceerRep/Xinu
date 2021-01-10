@@ -78,5 +78,7 @@ extern	shellcmd  xsh_help	(int32, char *[]);
 /* in file xsh_sort.cxx */
 extern shellcmd  xsh_sort (int32, char *[]);
 
-#endif
+/* in file xsh_image.c */
+extern shellcmd  xsh_image (int32, char *[]);
 
+#endif

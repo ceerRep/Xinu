@@ -52,7 +52,7 @@ intptr PageTableAlloc()
         for (auto &entry : pageTable)
         {
             entry.present = 0;
-            entry.allow_user_access = 0;
+            entry.allow_user_access = 1;
             entry.allow_write = 1;
             entry.global = 0;
             entry.page_cache_disable = 0;
@@ -132,14 +132,14 @@ extern "C"
             null_page_dir[i].table.page_write_through = 0;
             null_page_dir[i].table.page_cache_disable = 0;
             null_page_dir[i].table.allow_write = 1;
-            null_page_dir[i].table.allow_user_access = 0;
+            null_page_dir[i].table.allow_user_access = 1;
         }
 
         // Initialize Fat page
         for (uintptr now = 0; now < (uintptr)_end; now += FAT_PAGE_SIZE)
         {
             null_page_dir[PDX(now)].fat_page.address = PDX(now);
-            null_page_dir[PDX(now)].fat_page.allow_user_access = 0;
+            null_page_dir[PDX(now)].fat_page.allow_user_access = 1;
             null_page_dir[PDX(now)].fat_page.allow_write = 1;
             null_page_dir[PDX(now)].fat_page.global = 1;
             null_page_dir[PDX(now)].fat_page.page_cache_disable = 0;
@@ -155,13 +155,13 @@ extern "C"
         PageManager_t *PManager = pageManagerFactory();
 
         // VM initialized
-        vmLog = 1;
+        // vmLog = 1;
 
         // Enable Paging
         asm("mov %%eax, %%cr3\n\t"
             "mov %%cr4, %%eax\n\t"
-            // Enable 4MB Page
-            "or  $0x00000010, %%eax\n\t"
+            // Enable Page Size Extension [PSE] and Virtual 8086 Mode Extensions [VME]
+            "or  $0x00000011, %%eax\n\t"
             "mov %%eax, %%cr4\n\t"
             // Enable Paging
             "mov %%cr0, %%eax\n\t"

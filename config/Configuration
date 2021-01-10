@@ -64,6 +64,20 @@ nam:
 		-w ioerr 	-s ioerr 	-n ioerr
 		-intr ioerr
 
+/* type of VGA device */
+vga:
+	on top
+		-i ionull	-o ionull	-c ionull
+		-r ioerr	-g ioerr	-p vgaputc
+		-w vgawrite	-s vgaseek	-n vgactrl
+
+kbd:
+	on top
+		-i kbdinit	-o ionull	-c ionull
+		-r kbdread	-g kbdgetc	-p ioerr
+		-w ioerr	-s ioerr	-n kbdctrl
+		-intr kbddisp
+
 %%
 
 /* Actual device declarations that each give the name of a device that	*/
@@ -93,6 +107,12 @@ nam:
    LFILE3 is lfl on lfs
    LFILE4 is lfl on lfs
    LFILE5 is lfl on lfs
+
+   /* Define VGA device */
+   VGA0 is vga on top
+
+   /* Define keyboard device */
+   KBD0 is kbd on top -irq 33
 
 %%
 

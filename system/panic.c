@@ -12,5 +12,5 @@ void	panic (
 {
 	disable();			/* Disable interrupts		*/
 	kprintf("\n\n\rpanic: %s\n\n", msg);
-	while(TRUE) {;}			/* Busy loop forever		*/
+	while(TRUE) { asm("hlt"); }			/* Busy loop forever		*/
 }

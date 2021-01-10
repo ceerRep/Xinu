@@ -40,4 +40,15 @@ extern	int	bss;			/* Start of bss segment		*/
 extern	int	ebss;			/* End of bss segment		*/
 extern	int	end;			/* End of program		*/
 
+/* Segment Descriptor */
+
+struct __attribute__ ((__packed__)) sd {
+	unsigned short	sd_lolimit;
+	unsigned short	sd_lobase;
+	unsigned char	sd_midbase;
+	unsigned char   sd_access;
+	unsigned char	sd_hilim_fl;
+	unsigned char	sd_hibase;
+};
+
 #endif

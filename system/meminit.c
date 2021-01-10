@@ -19,18 +19,7 @@ struct	mbootinfo *bootinfo = (struct mbootinfo *)1;
 
 /* Segment table structures */
 
-/* Segment Descriptor */
-
-struct __attribute__ ((__packed__)) sd {
-	unsigned short	sd_lolimit;
-	unsigned short	sd_lobase;
-	unsigned char	sd_midbase;
-	unsigned char   sd_access;
-	unsigned char	sd_hilim_fl;
-	unsigned char	sd_hibase;
-};
-
-#define	NGD			6	/* Number of global descriptor entries	*/
+#define	NGD			8	/* Number of global descriptor entries	*/
 #define FLAGS_GRANULARITY	0x80
 #define FLAGS_SIZE		0x40
 #define	FLAGS_SETTINGS		(FLAGS_GRANULARITY | FLAGS_SIZE)
@@ -46,6 +35,7 @@ struct sd gdt_copy[NGD] = {
 /* 3rd, Kernel Stack Segment */
 {       0xffff,          0,           0,      0x92,         0xcf,        0, },
 /* 4th, Kernel TSS */
+{},
 {},
 {}
 };
@@ -190,6 +180,22 @@ void	setsegs()
 	psd->sd_access = 0x89;
 	psd->sd_hilim_fl = FLAGS_SIZE;
 	psd->sd_hibase = ((uintptr)&page_fault_tss) >> 24;
+
+	psd = &gdt_copy[6]; /* v8086 TSS */
+	psd->sd_lolimit = sizeof(full_tss_t);
+	psd->sd_lobase = (uintptr)&v8086_tss;
+	psd->sd_midbase = ((uintptr)&v8086_tss) >> 16;
+	psd->sd_access = 0x89;
+	psd->sd_hilim_fl = FLAGS_SIZE;
+	psd->sd_hibase = ((uintptr)&v8086_tss) >> 24;
+
+	psd = &gdt_copy[7]; /* General Protection TSS */
+	psd->sd_lolimit = sizeof(tss_t);
+	psd->sd_lobase = (uintptr)&gp_tss;
+	psd->sd_midbase = ((uintptr)&gp_tss) >> 16;
+	psd->sd_access = 0x89;
+	psd->sd_hilim_fl = FLAGS_SIZE;
+	psd->sd_hibase = ((uintptr)&gp_tss) >> 24;
 
 	memcpy(gdt, gdt_copy, sizeof(gdt_copy));
 }

@@ -3,6 +3,17 @@ ENTRY(start)
 physbase = 0x100000;
 SECTIONS
 {
+  . = 0x800;
+  CODE16 = ABSOLUTE(.);
+  . = 0x2000;
+  CODE16END = ABSOLUTE(.);
+  CODE16STACKBOTTOM = ABSOLUTE(.);
+  . = 0x4000;
+  CODE16STACKTOP = ABSOLUTE(.);
+  . = 0xA0000;
+  VGA_BASE = ABSOLUTE(.);
+  . = 0xB8000;
+  VGA_TEXT_BASE = ABSOLUTE(.);
   . = physbase;                 /* Image starts here                    */
   . = ALIGN(4096);              /* Accommodate bad physbase             */
   __executable_start = ABSOLUTE(.);
@@ -31,7 +42,15 @@ SECTIONS
     *(COMMON)                   /* extra sections that are common       */
     ebss = ABSOLUTE(.) ;        /* ebss: end of bss                     */
   }
+  . = ALIGN(4096);
+  kernel_vm_heap_start = ABSOLUTE(.);
+  . = ALIGN(4096 * 1024);
+  kernel_pg_pos = ABSOLUTE(.);
+  . = . + 4096 * 1024;
   /* Stabs debugging sections.  */
+  end = ABSOLUTE(.);          /* end: end of image                    */
+  _end = ABSOLUTE(.);         /* _end: end of image                   */
+
   .stab          0 : { *(.stab) }
   .stabstr       0 : { *(.stabstr) }
   .stab.excl     0 : { *(.stab.excl) }
@@ -73,12 +92,4 @@ SECTIONS
   .debug_addr     0 : { *(.debug_addr) }
   .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
-
-  . = ALIGN(4096);
-  kernel_vm_heap_start = ABSOLUTE(.);
-  . = ALIGN(4096 * 1024);
-  kernel_pg_pos = ABSOLUTE(.);
-  . = . + 4096 * 1024;
-  end = ABSOLUTE(.);          /* end: end of image                    */
-  _end = ABSOLUTE(.);         /* _end: end of image                   */
 }

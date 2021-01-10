@@ -33,9 +33,18 @@ typedef struct tss
     uint32 ldtr;
     uint16 padding;
     uint16 iopb_offset;
+    char redirect[32];
 } tss_t;
 
+typedef struct full_tss
+{
+    tss_t tss;
+    char io[65536 / 8 + 1];
+} full_tss_t;
+
 void tssinit();
-extern tss_t kernel_tss, page_fault_tss;
+extern tss_t kernel_tss, page_fault_tss, gp_tss;
+
+extern full_tss_t v8086_tss;
 
 #endif

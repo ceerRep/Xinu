@@ -30,7 +30,8 @@ devcall vgactrl(
 enum
 {
     VGA_MODESET,
-    VGA_MODEGET
+    VGA_MODEGET,
+    VGA_PALETTE_SET
 };
 
 enum

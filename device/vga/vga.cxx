@@ -95,9 +95,22 @@ extern "C"
                 devptr->dvseek(devptr, 0);
 
             return OK;
-        
+
         case VGA_MODEGET:
             return curr_vga_mode;
+
+        case VGA_PALETTE_SET:
+        {
+            uint8 red = arg2 >> 16 >> 2;
+            uint8 green = arg2 >> 8 >> 2;
+            uint8 blue = arg2 >> 2;
+            outb(0x03c6, 0xff);
+            outb(0x03c8, arg1);
+            outb(0x03c9, red);
+            outb(0x03c9, green);
+            outb(0x03c9, blue);
+            return OK;
+        }
 
         default:
             return SYSERR;
